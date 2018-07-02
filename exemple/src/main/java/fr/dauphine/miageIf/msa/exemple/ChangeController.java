@@ -3,6 +3,7 @@ package fr.dauphine.miageIf.msa.exemple;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,30 +23,34 @@ public class ChangeController {
 	
 	@Autowired
 	private CoursChangeRepository cc_repository;
-	@GetMapping("/devise-change/source/{source}/dest/{dest}")
+	@GetMapping("/devise-change/date/{date}/source/{source}/dest/{dest}")
 	public CoursChange retrouveCoursChange
-	(@PathVariable String source, @PathVariable String dest) {
-		CoursChange cc = cc_repository.findBySourceAndDestination(source, dest);
-		logger.info("GET DONE!");
+	(@PathVariable String date, @PathVariable String source, @PathVariable String dest) {
+		CoursChange cc = cc_repository.findByDateAndSourceAndDestination(date, source, dest);
+		System.out.println(cc.getId());
+		logger.info("GET DONE !! date : " + cc.getDate() + " source : " + cc.getSource() + " dest : " + cc.getDestination() + " taux : " + cc.getTaux());
 		return cc;
 	}
 	
 	@PostMapping("/devise-change/add/")
-	public void createCoursChange( 
+	public CoursChange createCoursChange( 
             @RequestBody CoursChange cc) {
 	
         CoursChange savedcc = cc_repository.save(cc);
         
         logger.info("INSERT DONE!");
+        
+        return savedcc;
 
     }
 	@PutMapping("/devise-change/update/")
-	public void updateCoursChange( 
+	public CoursChange updateCoursChange( 
             @RequestBody CoursChange cc) {
 	
         CoursChange savedcc = cc_repository.save(cc);
         
         logger.info("UPDATE DONE!");
+        return savedcc;
 
     }
 	@DeleteMapping("/devise-change/delete/{id}")

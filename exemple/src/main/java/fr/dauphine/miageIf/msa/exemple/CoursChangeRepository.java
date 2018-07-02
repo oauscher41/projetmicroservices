@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CoursChangeRepository extends JpaRepository<CoursChange, Integer>
 {
 	
-	CoursChange findBySourceAndDestination(String source, String destination);
+	CoursChange findByDateAndSourceAndDestination(String date, String source, String destination);
 	
 }

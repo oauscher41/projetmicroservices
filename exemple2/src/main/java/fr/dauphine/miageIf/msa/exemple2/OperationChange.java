@@ -18,10 +18,29 @@ public class OperationChange
     private String date;
 	@Column(nullable = false)
     private float montant;
+	@Column(nullable = false)
+    private String source;
+	@Column(nullable = false)
+    private String destination;
+	@Column(nullable = false)
+    private float taux;
 
     public int getIdTransaction()
     {
         return id;
+    }
+    public String getSource()
+    {
+    	return source;
+    }
+    public float getTaux()
+    {
+    	return taux;
+    }
+    public String getDestination()
+    {
+    	return destination;
+    	
     }
 
    public String getDate()
@@ -38,6 +57,19 @@ public class OperationChange
     public void setIdTransaction(int idTransaction)
     {
         this.id = idTransaction;
+    }
+    public void setTaux(float taux)
+    {
+    	this.taux = taux;
+    }
+  
+    public void setSource(String source)
+    {
+    	this.source = source;
+    }
+    public void setDestination(String destination)
+    {
+    	this.destination = destination;
     }
 
     public void setDate(String date)
