@@ -74,12 +74,39 @@ public class OperationController {
         logger.info("INSERT DONE!!");
 
     }
-	@PutMapping("/devise-change/update_operation/")
+	@PutMapping("/devise-change/update_operation/{id}")
 	public void updateOperationChange( 
-            @RequestBody OperationChange op) {
-	
-        OperationChange savedop = op_repository.save(op);
-        op_repository.
+            @RequestBody OperationChange op, @PathVariable int id) {
+		
+		RestTemplate restTemplate = new RestTemplate();
+		String date = op.getDate();
+		String source = op.getSource();
+		String dest = op.getDestination();
+		
+		String ResourceUrl = "http://localhost:8090/devise-change/date/"+date+"/source/"+source+"/dest/"+dest+"/";
+		
+		ResponseEntity<String> response = restTemplate.getForEntity(ResourceUrl, String.class);
+		
+		String taux_string;
+        try {
+			JSONObject objet = (JSONObject) new JSONParser().parse(response.getBody());
+			taux_string = objet.get("taux").toString();
+			
+			float taux = Float.parseFloat(taux_string);
+			
+			op.setTaux(taux);
+			op_repository.deleteById(id);    
+		    OperationChange savedop = op_repository.save(op);
+		    
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		
+		
+		
+		
         logger.info("UPDATE DONE!");
 
     }
