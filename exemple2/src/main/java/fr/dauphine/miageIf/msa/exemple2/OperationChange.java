@@ -22,10 +22,10 @@ public class OperationChange
     private String source;
 	@Column(nullable = false)
     private String destination;
-	@Column(nullable = false)
+	@Column(nullable = true)
     private float taux;
 
-    public int getIdTransaction()
+    public int getId()
     {
         return id;
     }
@@ -54,7 +54,7 @@ public class OperationChange
         return montant;
     }
     
-    public void setIdTransaction(int idTransaction)
+    public void setId(int idTransaction)
     {
         this.id = idTransaction;
     }

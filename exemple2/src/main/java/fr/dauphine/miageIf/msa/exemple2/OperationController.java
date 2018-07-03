@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+
 import java.util.Optional;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +27,11 @@ public class OperationController {
 	
 	@Autowired
 	private OperationChangeRepository op_repository;
-	@Autowired
-	@GetMapping("/devise-change/get_operation/{id}")
-	public Optional<OperationChange> retrouveOperationChange
-	(@PathVariable int id) {
+	
+	@GetMapping("/devise-change/get_operation/{id_s}")
+	public Optional<OperationChange> retrouveOperationChange (
+			@PathVariable String id_s) {
+		int id = Integer.parseInt(id_s);
 		Optional<OperationChange> op = op_repository.findById(id);
 		logger.info("GET DONE!");
 		return op;
@@ -42,10 +46,13 @@ public class OperationController {
 		String source = op.getSource();
 		String dest = op.getDestination();
 		
-		String ResourceUrl = "http://localhost:8000/devise-change/date/"+date+"/source/"+source+"/dest/"+dest;
+		String ResourceUrl = "http://localhost:8090/devise-change/date/"+date+"/source/"+source+"/dest/"+dest+"/";
 		
 		ResponseEntity<String> response = restTemplate.getForEntity(ResourceUrl, String.class);
-		response.toString()
+		
+		logger.info("BODY : " +response.getBody());
+		
+			JSONObject jsonObj = new JSONObject(response.getBody());
         
         OperationChange savedop = op_repository.save(op);
         
