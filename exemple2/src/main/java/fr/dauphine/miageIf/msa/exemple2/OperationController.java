@@ -2,6 +2,9 @@ package fr.dauphine.miageIf.msa.exemple2;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonParser;
 
+//import org.json.JSONException;
 import java.util.Optional;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,10 +53,23 @@ public class OperationController {
 		ResponseEntity<String> response = restTemplate.getForEntity(ResourceUrl, String.class);
 		
 		logger.info("BODY : " +response.getBody());
-		
-			JSONObject jsonObj = new JSONObject(response.getBody());
+		String taux_string;
+        try {
+			JSONObject objet = (JSONObject) new JSONParser().parse(response.getBody());
+			taux_string = objet.get("taux").toString();
+			
+			float taux = Float.parseFloat(taux_string);
+			
+			op.setTaux(taux);
+		        
+		    OperationChange savedop = op_repository.save(op);
+		    
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
-        OperationChange savedop = op_repository.save(op);
+      
         
         logger.info("INSERT DONE!");
 
@@ -64,7 +79,7 @@ public class OperationController {
             @RequestBody OperationChange op) {
 	
         OperationChange savedop = op_repository.save(op);
-        
+        op_repository.
         logger.info("UPDATE DONE!");
 
     }
