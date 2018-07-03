@@ -71,7 +71,7 @@ public class OperationController {
         
       
         
-        logger.info("INSERT DONE!");
+        logger.info("INSERT DONE!!");
 
     }
 	@PutMapping("/devise-change/update_operation/")
